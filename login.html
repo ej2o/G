@@ -20,18 +20,19 @@
   <!-- Google Fonts for Cairo -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Font Awesome for Social Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrZj/k7ujTnHg4Cgr2D7kSs0pReHq+S/M+bA3R8E4N6+4nC6p0x2Rz1c3f2b4M4T4U4z5f5f5f5f5f5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
   <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Firebase configuration (preferably from Canvas environment variables)
+    // تكوين Firebase.
+    // هام: إذا لم يتم تحديد __firebase_config بواسطة بيئة Canvas،
+    // تأكد من أن `userProvidedFirebaseConfig` أدناه يحتوي على تفاصيل مشروع Firebase الفعلية الخاصة بك
+    // (خاصة apiKey) من Firebase Console (إعدادات المشروع -> عام -> تطبيقاتك -> تطبيق الويب -> التكوين).
+    // مفتاح API الحالي أدناه هو عنصر نائب عام وقد لا يعمل لمشروعك المحدد.
     const userProvidedFirebaseConfig = {
-      apiKey: "AIzaSyCuttEadee0V2YOZHmG53a2Rck7AvFCFEM",
+      apiKey: "AIzaSyCuttEadee0V2YOZHmG53a2Rck7AvFCFEM", // استبدل هذا بمفتاح API الفعلي الخاص بك إذا لزم الأمر
       authDomain: "mercato-2cf1d.firebaseapp.com",
       projectId: "mercato-2cf1d",
       storageBucket: "mercato-2cf1d.firebasestorage.app",
@@ -60,10 +61,6 @@
     };
     window.firebaseAuthMethods = {
       signInWithEmailAndPassword: signInWithEmailAndPassword,
-      onAuthStateChanged: onAuthStateChanged,
-      signInWithPopup: signInWithPopup,
-      GoogleAuthProvider: GoogleAuthProvider,
-      FacebookAuthProvider: FacebookAuthProvider,
     };
 
     async function initializeAuthForCanvasAndRender() {
@@ -74,11 +71,9 @@
           await signInAnonymously(auth);
         }
       } catch (error) {
-        console.error("Error initializing Firebase authentication:", error);
+        console.error("خطأ في تهيئة مصادقة Firebase:", error);
       }
 
-      // Hide the loading screen and render the app immediately.
-      // No immediate redirection based on auth state, allowing users to visit login page even if logged in.
       const initialLoadingScreen = document.getElementById('initial-loading');
       if (initialLoadingScreen) {
         initialLoadingScreen.style.display = 'none';
@@ -91,28 +86,28 @@
   </script>
 
   <style>
-    /* New luxurious color palette (Permanent Dark Mode): */
-    /* Primary Dark: #1A2C42 (Deep Navy / Dark Blue) */
-    /* Accent Gold: #D4AF37 (Gold / Bronze) */
-    /* Light Background (used as text color now): #F8F8F8 (Very Light Grey / Cream) */
-    /* Secondary Accent: #5A7D9D (Pale Blue / Teal) */
+    /* لوحة الألوان الفاخرة الجديدة (الوضع الليلي الدائم): */
+    /* Primary Dark: #1A2C42 (كحلي عميق / أزرق داكن) */
+    /* Accent Gold: #D4AF37 (ذهبي / برونزي) */
+    /* Light Background (used as text color now): #F8F8F8 (رمادي فاتح جداً / كريمي) */
+    /* Secondary Accent: #5A7D9D (أزرق باهت / تيل) */
     /* Background Darkest: #0F1A2A */
     /* Form Background: #1F2E40 */
     /* Input/Border: #2C3E50 */
 
     body {
       font-family: 'Cairo', sans-serif;
-      background: #0F1A2A; /* Fixed dark background */
-      color: #F8F8F8; /* Light primary text color */
+      background: #0F1A2A; /* خلفية داكنة ثابتة */
+      color: #F8F8F8; /* لون النص الأساسي الفاتح */
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       line-height: 1.6;
       text-align: right;
-      font-size: 0.625rem; /* ~78% of 0.8rem, to effectively scale down other elements */
+      font-size: 0.625rem; /* ~78% من 0.8rem، لتقليص العناصر الأخرى بشكل فعال */
     }
 
-    /* Tailwind font sizes - to maintain good text sizes */
+    /* أحجام الخطوط في Tailwind - للحفاظ على أحجام النصوص جيدة */
     .text-xs { font-size: 0.7rem; }
     .text-sm { font-size: 0.8rem; }
     .text-base { font-size: 0.9rem; }
@@ -123,7 +118,7 @@
     .text-4xl { font-size: 2.25rem; }
     .text-5xl { font-size: 2.5rem; }
 
-    /* Gold-accented buttons */
+    /* أزرار بلمسة ذهبية */
     .btn-primary {
       background-color: #D4AF37;
       color: #1A2C42;
@@ -156,7 +151,7 @@
       box-shadow: 0 1.5px 4.5px rgba(212, 175, 55, 0.3);
     }
 
-    /* Initial loading screen styles */
+    /* أنماط شاشة التحميل الأولية */
     #initial-loading {
         position: fixed;
         top: 0;
@@ -185,7 +180,7 @@
         100% { transform: rotate(360deg); }
     }
 
-    /* Custom modal styles (instead of alert) */
+    /* أنماط المودال المخصصة (بدلاً من alert) */
     .custom-modal-overlay {
       position: fixed;
       top: 0;
@@ -283,50 +278,6 @@
     .login-form-card .animate-spin {
         color: #F8F8F8;
     }
-
-    /* Social login buttons */
-    .social-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 0.4rem 1.3rem;
-        border-radius: 9999px;
-        font-weight: 700;
-        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-        font-size: 0.9rem;
-        box-shadow: 0 2.5px 6.5px rgba(0, 0, 0, 0.2);
-    }
-    .social-btn i {
-        margin-left: 0.5rem; /* Space between icon and text */
-    }
-    .social-btn.google {
-        background-color: #DB4437;
-        color: white;
-    }
-    .social-btn.google:hover {
-        background-color: #C3352A;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-    .social-btn.facebook {
-        background-color: #4267B2;
-        color: white;
-    }
-    .social-btn.facebook:hover {
-        background-color: #365899;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-    .social-btn.apple {
-        background-color: #000000;
-        color: white;
-    }
-    .social-btn.apple:hover {
-        background-color: #333333;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
   </style>
 </head>
 <body class="font-cairo antialiased overflow-x-hidden">
@@ -337,14 +288,14 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <div id="root" class="flex-grow flex flex-col">
-    <!-- Initial loading screen (hidden when the app is rendered) -->
+    <!-- شاشة التحميل الأولية (تختفي عندما يتم تحميل التطبيق) -->
     <div id="initial-loading" class="flex flex-col items-center justify-center min-h-screen">
         <div class="loading-spinner"></div>
-        <p class="text-xl text-gray-300 mt-2">Checking login status...</p>
+        <p class="text-xl text-gray-300 mt-2">جاري التحقق من تسجيل الدخول...</p>
     </div>
   </div>
 
-  <!-- React Libraries -->
+  <!-- مكتبات React الأساسية -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -353,10 +304,10 @@
     const useState = React.useState;
     const useEffect = React.useEffect;
 
-    // Custom Modal Component for displaying messages
+    // مكون المودال المخصص لعرض الرسائل
     const CustomModal = ({ message, type, onClose }) => {
       const isSuccess = type === 'success';
-      const title = isSuccess ? 'Success!' : 'Error!';
+      const title = isSuccess ? 'نجاح!' : 'خطأ!';
       const bgColorClass = isSuccess ? 'bg-green-600' : 'bg-red-600';
       const textColorClass = 'text-white';
       const borderColorClass = isSuccess ? 'border-green-400' : 'border-red-400';
@@ -372,14 +323,14 @@
               onClick={onClose}
               className="bg-[#D4AF37] text-[#1A2C42] font-bold py-2 px-6 rounded-full hover:bg-[#C29B27] transition-colors duration-300 shadow-sm text-sm"
             >
-              OK
+              حسناً
             </button>
           </div>
         </div>
       );
     };
 
-    // --- Login Page Component ---
+    // --- مكون صفحة تسجيل الدخول (Login) ---
     const LoginPage = () => {
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
@@ -391,9 +342,9 @@
         setLoading(true);
         setModal(null); // Clear previous messages
 
-        // Check for Firebase Auth availability
+        // تحقق من توفر Firebase Auth
         if (!window.firebaseAuthMethods || !window.firebaseAuth) {
-          setModal({ message: 'Error initializing Firebase. Please refresh the page.', type: 'error' });
+          setModal({ message: 'خطأ في تهيئة Firebase. يرجى تحديث الصفحة.', type: 'error' });
           setLoading(false);
           return;
         }
@@ -404,34 +355,34 @@
             email,
             password
           );
-          setModal({ message: 'Login successful! Redirecting to home page.', type: 'success' });
-          // Redirect to home page after success with a short delay
+          setModal({ message: 'تم تسجيل الدخول بنجاح! سيتم توجيهك إلى الصفحة الرئيسية.', type: 'success' });
+          // إعادة التوجيه إلى الصفحة الرئيسية بعد النجاح بفترة قصيرة
           setTimeout(() => {
-            window.location.href = 'index.html'; // Redirect to index.html
+            window.location.href = 'index.html';
           }, 1500);
 
         } catch (error) {
-          let errorMessage = 'An error occurred during login. Please try again.';
+          let errorMessage = 'حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.';
           if (error.code) {
             switch (error.code) {
               case 'auth/invalid-email':
-                errorMessage = 'Invalid email format.';
+                errorMessage = 'صيغة البريد الإلكتروني غير صحيحة.';
                 break;
               case 'auth/user-disabled':
-                errorMessage = 'This account has been disabled.';
+                errorMessage = 'تم تعطيل هذا الحساب.';
                 break;
               case 'auth/user-not-found':
               case 'auth/wrong-password':
-                errorMessage = 'Incorrect email or password.';
+                errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
                 break;
               case 'auth/invalid-credential':
-                errorMessage = 'Incorrect email or password.';
+                errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
                 break;
               case 'auth/too-many-requests':
-                  errorMessage = 'Too many failed login attempts. Please try again later.';
+                  errorMessage = 'عدد كبير جدًا من محاولات تسجيل الدخول الفاشلة. يرجى المحاولة لاحقاً.';
                   break;
               default:
-                errorMessage = `Error: ${error.message}`;
+                errorMessage = `خطأ: ${error.message}`;
             }
           }
           setModal({ message: errorMessage, type: 'error' });
@@ -441,93 +392,23 @@
         }
       };
 
-      const handleSocialLogin = async (providerName) => {
-        setLoading(true);
-        setModal(null);
-
-        if (!window.firebaseAuthMethods || !window.firebaseAuth) {
-          setModal({ message: 'Error initializing Firebase. Please refresh the page.', type: 'error' });
-          setLoading(false);
-          return;
-        }
-
-        let provider;
-        if (providerName === 'google') {
-          provider = new window.firebaseAuthMethods.GoogleAuthProvider();
-        } else if (providerName === 'facebook') {
-          provider = new window.firebaseAuthMethods.FacebookAuthProvider();
-        } else if (providerName === 'apple') {
-            setModal({ message: 'Apple login is not fully supported in this demo.', type: 'error' });
-            setLoading(false);
-            return;
-        }
-
-        try {
-          const result = await window.firebaseAuthMethods.signInWithPopup(window.firebaseAuth, provider);
-          const user = result.user;
-
-          // Check if user profile exists in Firestore. If not, create it.
-          const userDocRef = window.firebaseFirestore.doc(window.firebaseFirestore.dbInstance, 'artifacts', window.mercatoAppId, 'users', user.uid, 'userProfiles', 'profile');
-          const userDocSnap = await window.firebaseFirestore.getDoc(userDocRef);
-
-          if (!userDocSnap.exists()) {
-            await window.firebaseFirestore.setDoc(userDocRef, {
-              email: user.email,
-              createdAt: window.firebaseFirestore.serverTimestamp(),
-              country: 'Not Selected', // Default value for new social users
-            });
-          }
-
-          setModal({ message: `Successfully logged in with ${providerName.charAt(0).toUpperCase() + providerName.slice(1)}! Redirecting to home page.`, type: 'success' });
-          setTimeout(() => {
-              window.location.href = 'index.html'; // Redirect to index.html
-          }, 1500);
-
-        } catch (error) {
-          let errorMessage = 'An error occurred during social login with ' + providerName.charAt(0).toUpperCase() + providerName.slice(1) + '. Please try again.';
-          if (error.code) {
-            switch (error.code) {
-              case 'auth/popup-closed-by-user':
-                errorMessage = 'Authentication popup closed by user.';
-                break;
-              case 'auth/cancelled-popup-request':
-                errorMessage = 'Popup request cancelled.';
-                break;
-              case 'auth/account-exists-with-different-credential':
-                errorMessage = 'An account with this email already exists. Please log in with your original method.';
-                break;
-              case 'auth/unauthorized-domain':
-                errorMessage = 'Authentication failed. Please ensure your domain is authorized in Firebase console settings.';
-                break;
-              default:
-                errorMessage = `Error: ${error.message}`;
-            }
-          }
-          setModal({ message: errorMessage, type: 'error' });
-          console.error("Social login error:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-
       return (
         <div className="min-h-screen flex items-center justify-center bg-[#0F1A2A] p-2.5">
           <div className="login-form-card rounded-xl shadow-xl p-6 w-full max-w-xs animate-fade-in-up">
             <div className="text-center mb-4">
               <img
                 src="https://i.postimg.cc/8CpKtfQw/file-0000000018d862468d05a4f4346102fe-1.png"
-                alt="Mercato"
+                alt="ميركاتو"
                 className="w-20 h-auto mx-auto mb-2"
               />
-              <h2 className="text-2xl font-extrabold text-white mb-1">Login</h2>
-              <p className="text-[#9EC0D8] text-sm">Welcome back to Mercato!</p>
+              <h2 className="text-2xl font-extrabold text-white mb-1">تسجيل الدخول</h2>
+              <p className="text-[#9EC0D8] text-sm">أهلاً بك مرة أخرى في ميركاتو!</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-3.5">
               <div>
                 <label className="block text-base font-semibold text-white mb-1" htmlFor="email">
-                  Email
+                  البريد الإلكتروني
                 </label>
                 <input
                   type="email"
@@ -535,13 +416,13 @@
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-[#5A7D9D] focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all duration-300 text-sm bg-[#2C3E50] text-[#F8F8F8]"
-                  placeholder="Enter your email"
+                  placeholder="أدخل بريدك الإلكتروني"
                   required
                 />
               </div>
               <div>
                 <label className="block text-base font-semibold text-white mb-1" htmlFor="password">
-                  Password
+                  كلمة المرور
                 </label>
                 <input
                   type="password"
@@ -549,7 +430,7 @@
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-2.5 rounded-lg border border-[#5A7D9D] focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-all duration-300 text-sm bg-[#2C3E50] text-[#F8F8F8]"
-                  placeholder="Enter your password"
+                  placeholder="أدخل كلمة المرور"
                   required
                 />
               </div>
@@ -564,51 +445,23 @@
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Logging in...</span>
+                    <span>جاري تسجيل الدخول...</span>
                   </>
                 ) : (
-                  <span>Login</span>
+                  <span>تسجيل الدخول</span>
                 )}
               </button>
             </form>
 
-            <div className="my-3.5 text-center text-sm text-[#9EC0D8]">Or login via</div>
-            <div className="space-y-2">
-              <button
-                onClick={() => handleSocialLogin('google')}
-                className="social-btn google"
-                disabled={loading}
-              >
-                <i className="fab fa-google"></i>
-                <span>Google</span>
-              </button>
-              <button
-                onClick={() => handleSocialLogin('facebook')}
-                className="social-btn facebook"
-                disabled={loading}
-              >
-                <i className="fab fa-facebook-f"></i>
-                <span>Facebook</span>
-              </button>
-              <button
-                onClick={() => handleSocialLogin('apple')}
-                className="social-btn apple"
-                disabled={loading}
-              >
-                <i className="fab fa-apple"></i>
-                <span>Apple</span>
-              </button>
-            </div>
-
             <p className="text-center text-sm mt-4 text-white">
               <a href="forgot-password.html" className="text-[#D4AF37] hover:underline font-semibold">
-                Forgot password?
+                هل نسيت كلمة المرور؟
               </a>
             </p>
             <p className="text-center text-sm mt-2 text-white">
-              Don't have an account?{' '}
+              ليس لديك حساب؟{' '}
               <a href="signup.html" className="text-[#D4AF37] hover:underline font-semibold">
-                Create new account
+                إنشاء حساب جديد
               </a>
             </p>
           </div>
@@ -617,7 +470,7 @@
       );
     };
 
-    // Render LoginPage component in the root div
+    // عرض مكون LoginPage في div الجذر بعد التحقق من حالة المصادقة
     window.renderApp = () => {
         const initialLoadingScreen = document.getElementById('initial-loading');
         if (initialLoadingScreen) {
@@ -626,11 +479,11 @@
         ReactDOM.render(<LoginPage />, document.getElementById('root'));
     };
 
-    // Initial loading screen to ensure Firebase is initialized
+    // شاشة تحميل أولية لضمان أن Firebase قد تم تهيئته والتحقق من حالة المصادقة
     ReactDOM.render(
       <div id="initial-loading" class="flex flex-col items-center justify-center min-h-screen">
           <div class="loading-spinner"></div>
-          <p class="text-xl text-gray-300 mt-2">Checking login status...</p>
+          <p class="text-xl text-gray-300 mt-2">جاري التحقق من تسجيل الدخول...</p>
       </div>,
       document.getElementById('root')
     );
