@@ -26,7 +26,7 @@
     import { getAuth, signInWithEmailAndPassword, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, setDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // تكوين Firebase.
+    // Firebase configuration.
     // هام: إذا لم يتم تحديد __firebase_config بواسطة بيئة Canvas،
     // تأكد من أن `userProvidedFirebaseConfig` أدناه يحتوي على تفاصيل مشروع Firebase الفعلية الخاصة بك
     // (خاصة apiKey) من Firebase Console (إعدادات المشروع -> عام -> تطبيقاتك -> تطبيق الويب -> التكوين).
@@ -355,11 +355,15 @@
             email,
             password
           );
-          setModal({ message: 'تم تسجيل الدخول بنجاح! سيتم توجيهك إلى الصفحة الرئيسية.', type: 'success' });
-          // إعادة التوجيه إلى الصفحة الرئيسية بعد النجاح بفترة قصيرة
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 1500);
+          // Instead of immediate redirect, show success modal and redirect on close
+          setModal({
+            message: 'تم تسجيل الدخول بنجاح! انقر على حسناً للمتابعة.',
+            type: 'success',
+            onClose: () => {
+              setModal(null); // Close the modal
+              window.location.href = 'index.html'; // Redirect only after user clicks OK
+            }
+          });
 
         } catch (error) {
           let errorMessage = 'حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.';
@@ -385,7 +389,8 @@
                 errorMessage = `خطأ: ${error.message}`;
             }
           }
-          setModal({ message: errorMessage, type: 'error' });
+          // For error, onClose just dismisses the modal
+          setModal({ message: errorMessage, type: 'error', onClose: () => setModal(null) });
           console.error("Login error:", error);
         } finally {
           setLoading(false);
@@ -465,7 +470,8 @@
               </a>
             </p>
           </div>
-          {modal && <CustomModal message={modal.message} type={modal.type} onClose={() => setModal(null)} />}
+          {/* Custom modal is rendered conditionally based on 'modal' state */}
+          {modal && <CustomModal message={modal.message} type={modal.type} onClose={modal.onClose} />}
         </div>
       );
     };
