@@ -336,7 +336,7 @@
       const [password, setPassword] = useState('');
       const [confirmPassword, setConfirmPassword] = useState('');
       const [loading, setLoading] = useState(false);
-      const [modal, setModal] = useState(null); // { message, type }
+      const [modal, setModal] = useState(null); // { message, type, onClose }
 
       const handleSignup = async (e) => {
         e.preventDefault();
@@ -344,14 +344,14 @@
         setModal(null); // Clear previous messages
 
         if (password !== confirmPassword) {
-          setModal({ message: 'كلمتا المرور غير متطابقتين. يرجى التحقق وإعادة المحاولة.', type: 'error' });
+          setModal({ message: 'كلمتا المرور غير متطابقتين. يرجى التحقق وإعادة المحاولة.', type: 'error', onClose: () => setModal(null) });
           setLoading(false);
           return;
         }
 
         // تحقق من توفر Firebase Auth و Firestore
         if (!window.firebaseAuthMethods || !window.firebaseFirestore || !window.mercatoAppId) {
-          setModal({ message: 'خطأ في تهيئة Firebase. يرجى تحديث الصفحة.', type: 'error' });
+          setModal({ message: 'خطأ في تهيئة Firebase. يرجى تحديث الصفحة.', type: 'error', onClose: () => setModal(null) });
           setLoading(false);
           return;
         }
@@ -374,10 +374,15 @@
             }
           );
 
-          setModal({ message: 'تم إنشاء حسابك بنجاح! سيتم توجيهك إلى الصفحة الرئيسية.', type: 'success' });
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 1500);
+          // بدلًا من إعادة التوجيه الفوري، اعرض مودال النجاح وأعد التوجيه عند النقر على "حسناً"
+          setModal({
+            message: 'تم إنشاء حسابك بنجاح! انقر على حسناً للمتابعة.',
+            type: 'success',
+            onClose: () => {
+              setModal(null); // أغلق المودال
+              window.location.href = 'index.html'; // أعد التوجيه فقط بعد نقر المستخدم على "حسناً"
+            }
+          });
 
         } catch (error) {
           let errorMessage = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
@@ -396,7 +401,8 @@
                 errorMessage = `خطأ: ${error.message}`;
             }
           }
-          setModal({ message: errorMessage, type: 'error' });
+          // بالنسبة للخطأ، onClose يغلق المودال فقط
+          setModal({ message: errorMessage, type: 'error', onClose: () => setModal(null) });
           console.error("Signup error:", error);
         } finally {
           setLoading(false);
@@ -485,7 +491,8 @@
               </a>
             </p>
           </div>
-          {modal && <CustomModal message={modal.message} type={modal.type} onClose={() => setModal(null)} />}
+          {/* Custom modal is rendered conditionally based on 'modal' state */}
+          {modal && <CustomModal message={modal.message} type={modal.type} onClose={modal.onClose} />}
         </div>
       );
     };
